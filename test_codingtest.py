@@ -30,6 +30,7 @@ class TestCount(unittest.TestCase):
 
   def test_argument_parser(self):
     open(self.test_file_name, 'w')
+    # Exit codes correct
     for testable_argument_list in self.argument_lists:
       with self.assertRaises(SystemExit) as e:
         codingtest.argument_parser(testable_argument_list)
@@ -39,13 +40,13 @@ class TestCount(unittest.TestCase):
     with open(self.test_file_name, 'w') as f:
       for i in self.invalid_int_list:
         f.write(str(i) + '\n')
+    # Error if not integers in file
     self.assertRaisesRegex(ValueError, 'invalid literal .*',
                            codingtest.read_numbers_from_file, self.test_file_name)
 
     with open(self.test_file_name, 'w') as f:
       for i in self.int_list:
         f.write(str(i) + '\n')
-
     numbers_list = codingtest.read_numbers_from_file(self.test_file_name)
     for i, item in enumerate(numbers_list):
       # Items are equal
@@ -56,10 +57,12 @@ class TestCount(unittest.TestCase):
     sum_resp = 0
     for i in self.int_list:
       sum_resp += i
+    # Sum calculated correctly
     self.assertEqual(result, sum_resp)
 
     result = codingtest.calculate_operation(self.int_list, 'avg')
     avg_resp = sum_resp / len(self.int_list)
+    # Average calculated correctly
     self.assertEqual(result, avg_resp)
 
     result = codingtest.calculate_operation(self.int_list, 'median')
@@ -70,6 +73,7 @@ class TestCount(unittest.TestCase):
       median_resp = sorted_list[median_index]
     else:
       median_resp = (sorted_list[median_index] + sorted_list[median_index + 1]) / 2
+    # Median calculated correctly
     self.assertEqual(result, median_resp)
 
   def test_print_result(self):
@@ -97,12 +101,15 @@ class TestCount(unittest.TestCase):
   def test_compare_values(self):
     for comparison_list in self.comparison_values_list:
       comparison_result = codingtest.compare_values(comparison_list[0], comparison_list[1], 'gt')
+      # Greater than comparison check
       self.assertEqual(comparison_result, comparison_list[0] > comparison_list[1])
 
       comparison_result = codingtest.compare_values(comparison_list[0], comparison_list[1], 'lt')
+      # Less than comparison check
       self.assertEqual(comparison_result, comparison_list[0] < comparison_list[1])
 
       comparison_result = codingtest.compare_values(comparison_list[0], comparison_list[1], 'eq')
+      # Equal comparison check
       self.assertEqual(comparison_result, comparison_list[0] == comparison_list[1])
 
 
